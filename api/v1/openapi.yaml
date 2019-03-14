@@ -1,0 +1,69 @@
+---
+
+swagger: '2.0'
+
+info:
+  version: 0.0.1
+  title: PromQL Server
+  description: ""
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath:
+  /api/v1
+
+paths:
+  /tree:
+    get:
+      operationId: getTree
+      description: Return an abstract syntax tree based on a query.
+      responses:
+        '200':
+          description: Get abstract syntax tree
+          schema:
+            $ref: '#/definitions/node'
+        '422':
+          $ref: '#/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/responses/InternalServerError'
+      parameters:
+        - name: query
+          in: query
+          description: A Prometheus query
+          required: true
+          type: string
+
+responses:
+  BadRequest:
+    description: Bad request
+    schema:
+      type: string
+  UnprocessableEntity:
+    description: Unprocessable entity
+    schema:
+      type: string
+  InternalServerError:
+    description: Internal server error
+    schema:
+      type: string
+
+
+
+definitions:
+  node:
+    type: object
+    properties:
+      t:
+        type: string
+      v:
+        type: string
+      children:
+        type: array
+        items:
+          $ref: '#/definitions/node'
